@@ -11,6 +11,7 @@ import (
 	"os"
 	"time"
 
+	"github.com/joho/godotenv"
 	"github.com/russross/blackfriday/v2"
 )
 
@@ -123,6 +124,10 @@ func main() {
 	flag.StringVar(&markdownFilePath, "markdownFilePath", "./", "The path to the Markdown file you want to publish.")
 	flag.StringVar(&title, "title", "", "What you wish to title the generated Confluence page.")
 	flag.Parse()
+
+	if err := godotenv.Load(); err != nil {
+		log.Fatalf("Error loading .env file: %v.", err)
+	}
 
 	htmlPageContent, err := convertMarkdownToHTML(markdownFilePath)
 	if err != nil {
