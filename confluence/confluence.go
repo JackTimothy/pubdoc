@@ -114,6 +114,5 @@ func ConvertMarkdownToHTML(markdownFilePath string) (html string, err error) {
 	}
 
 	htmlContent := parser.MarkdownToHTML(content)
-	fmt.Println(string(htmlContent))
 	return string(htmlContent), nil
 }
