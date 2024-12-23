@@ -2,25 +2,13 @@ package main
 
 import (
 	"flag"
-	"fmt"
 	"log"
-	"path"
 	"path/filepath"
-	"strings"
 
 	"github.com/JackTimothy/pubdoc/configuration"
 	"github.com/JackTimothy/pubdoc/confluence"
 	"github.com/joho/godotenv"
 )
-
-func formatBase(base string) (string, error) {
-	ext := path.Ext(base)
-	fmtBase, ok := strings.CutSuffix(base, ext)
-	if !ok {
-		return "", fmt.Errorf("Could not find extension suffix")
-	}
-	return fmtBase, nil
-}
 
 func main() {
 	var markdownFilePath, title string
@@ -28,7 +16,7 @@ func main() {
 	flag.Parse()
 
 	title = filepath.Base(markdownFilePath)
-	title, err := formatBase(title)
+	title, err := confluence.FormatBase(title)
 	if err != nil {
 		log.Fatalf("Error formatting title: %v.", err)
 	}
