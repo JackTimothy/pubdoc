@@ -9,8 +9,8 @@ import (
 	"os"
 	"time"
 
-	"github.com/russross/blackfriday/v2"
 	"github.com/JackTimothy/pubdoc/configuration"
+	"github.com/JackTimothy/pubdoc/parser"
 )
 
 // Send this in a POST to https://{your-domain}/wiki/api/v2/pages to create a new page.
@@ -96,7 +96,7 @@ func ConvertMarkdownToHTML(markdownFilePath string) (html string, err error) {
 		return "", fmt.Errorf("failed to read markdown file: %w", err)
 	}
 
-	htmlContent := blackfriday.Run(content)
+	htmlContent := parser.MarkdownToHTML(content)
 	fmt.Println(string(htmlContent))
 	return string(htmlContent), nil
 }

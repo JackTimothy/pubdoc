@@ -2,6 +2,7 @@ module github.com/JackTimothy/pubdoc
 
 go 1.21.3
 
-require github.com/russross/blackfriday/v2 v2.1.0
-
-require github.com/joho/godotenv v1.5.1
+require (
+	github.com/gomarkdown/markdown v0.0.0-20241205020045-f7e15b2f3e62
+	github.com/joho/godotenv v1.5.1
+)
