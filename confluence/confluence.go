@@ -13,20 +13,14 @@ import (
 
 	"github.com/JackTimothy/pubdoc/configuration"
 	"github.com/JackTimothy/pubdoc/parser"
-	"golang.org/x/text/cases"
-	"golang.org/x/text/language"
 )
 
 func FormatBase(base string) (string, error) {
 	ext := path.Ext(base)
 	fmtBase, ok := strings.CutSuffix(base, ext)
 	if !ok {
-		return "", fmt.Errorf("Could not find extension suffix")
+		return "", fmt.Errorf("could not find extension suffix")
 	}
-	replacer := strings.NewReplacer("-", " ", "_", " ", ".", " ")
-	fmtBase = replacer.Replace(fmtBase)
-	c := cases.Caser(cases.Title(language.English))
-	fmtBase = c.String(fmtBase)
 	return fmtBase, nil
 }
 
