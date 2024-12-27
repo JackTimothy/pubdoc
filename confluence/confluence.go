@@ -133,7 +133,7 @@ func CreatePage(title, htmlPageContent, parentID string, config configuration.Co
 
 // Gets pages in a given space based on the passed in opts. 
 // See GetPagesInSpaceOpts for query options
-func GetPagesInSpace(opts GetPagesInSpaceOpts, config configuration.Configuration) (got *GetpagesInSpaceResponseBodyStatusOk, err error) {
+func GetPagesInSpace(opts GetPagesInSpaceOpts, config configuration.Configuration) (got *GetPagesInSpaceResponseBodyStatusOk, err error) {
 	url := fmt.Sprintf("https://%s/wiki/api/v2/spaces/%s/pages", config.Domain, config.SpaceID)
 
 	// Construct query parameters conditionally
@@ -178,7 +178,7 @@ func GetPagesInSpace(opts GetPagesInSpaceOpts, config configuration.Configuratio
 		return nil, fmt.Errorf("error response code: %d; body: %s", resp.StatusCode, string(bodyBytes))
 	}
 
-	var response GetpagesInSpaceResponseBodyStatusOk
+	var response GetPagesInSpaceResponseBodyStatusOk
 	if err := json.Unmarshal(bodyBytes, &response); err != nil {
 		return nil, fmt.Errorf("failed to unmarshal response: %w", err)
 	}

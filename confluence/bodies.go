@@ -49,7 +49,7 @@ type CreatePageResponseBodyStatusOk struct {
 }
 
 // The body of a '200 OK' response to a GET pages In Space for the Confluence v2 API.
-type GetpagesInSpaceResponseBodyStatusOk struct {
+type GetPagesInSpaceResponseBodyStatusOk struct {
 	Results []struct {
 		ID          string `json:"id"`
 		Status      string `json:"status"`
