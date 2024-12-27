@@ -13,7 +13,6 @@ import (
 	"time"
 
 	"github.com/JackTimothy/pubdoc/configuration"
-	Bodies "github.com/JackTimothy/pubdoc/confluence/types/bodies"
 )
 
 // Naive path base formatter. Should a user want something more 
@@ -38,9 +37,9 @@ type GetPagesInSpaceOpts struct {
 // Should there be multiple pages with the title nothing occurs.
 // Should there not be a page with given title nothing occurs.
 func DeletePage(title string, config configuration.Configuration) error {
-	gotPages, err := GetPagesInSpace(GetPagesInSpaceOpts{Title: title, Limit: 10}, config)
+	gotPages, err := GetPagesInSpace(GetPagesInSpaceOpts{Title: title, Limit: 1}, config)
 	if err != nil {
-		log.Printf("Warning: Failed to Delete Page due to inablility to get page in space.")
+		log.Printf("Warning: Failed to Delete Page due to inability to get page in space.")
 		return nil
 	}
 
@@ -80,12 +79,12 @@ func DeletePage(title string, config configuration.Configuration) error {
 	return nil
 }
 
-// Will create a page with given title containng htmlPageContent.
+// Will create a page with given title containing htmlPageContent.
 // If the page already exists an error will be returned.
 func CreatePage(title, htmlPageContent, parentID string, config configuration.Configuration) (newPageId string, err error) {
 	url := fmt.Sprintf("https://%s/wiki/api/v2/pages", config.Domain)
 
-	payload := Bodies.CreatePageRequestBody{
+	payload := CreatePageRequestBody{
 		SpaceID:  string(config.SpaceID),
 		Status:   "current",
 		Title:    title,
@@ -124,7 +123,7 @@ func CreatePage(title, htmlPageContent, parentID string, config configuration.Co
 		return "", fmt.Errorf("error response code: %d; body: %s", resp.StatusCode, string(bodyBytes))
 	}
 
-	var response Bodies.CreatePageResponseBodyStatusOk
+	var response CreatePageResponseBodyStatusOk
 	if err := json.Unmarshal(bodyBytes, &response); err != nil {
 		return "", fmt.Errorf("failed to unmarshal response: %w", err)
 	}
@@ -134,7 +133,7 @@ func CreatePage(title, htmlPageContent, parentID string, config configuration.Co
 
 // Gets pages in a given space based on the passed in opts. 
 // See GetPagesInSpaceOpts for query options
-func GetPagesInSpace(opts GetPagesInSpaceOpts, config configuration.Configuration) (got *Bodies.GetpagesInSpaceResponseBodyStatusOk, err error) {
+func GetPagesInSpace(opts GetPagesInSpaceOpts, config configuration.Configuration) (got *GetpagesInSpaceResponseBodyStatusOk, err error) {
 	url := fmt.Sprintf("https://%s/wiki/api/v2/spaces/%s/pages", config.Domain, config.SpaceID)
 
 	// Construct query parameters conditionally
@@ -179,7 +178,7 @@ func GetPagesInSpace(opts GetPagesInSpaceOpts, config configuration.Configuratio
 		return nil, fmt.Errorf("error response code: %d; body: %s", resp.StatusCode, string(bodyBytes))
 	}
 
-	var response Bodies.GetpagesInSpaceResponseBodyStatusOk
+	var response GetpagesInSpaceResponseBodyStatusOk
 	if err := json.Unmarshal(bodyBytes, &response); err != nil {
 		return nil, fmt.Errorf("failed to unmarshal response: %w", err)
 	}
@@ -190,7 +189,7 @@ func GetPagesInSpace(opts GetPagesInSpaceOpts, config configuration.Configuratio
 // Will update the page with given pageTitle to contain htmlPageContent
 // Does nothing if the page does not exist
 // Does nothing if multiple pages exist with given title.
-func UpdatePage(pageTitle, htmlPageContent string, config configuration.Configuration) (respOK *Bodies.UpdatePageResponseBodyStatusOk, err error) {
+func UpdatePage(pageTitle, htmlPageContent string, config configuration.Configuration) (respOK *UpdatePageResponseBodyStatusOk, err error) {
 	respBody, err := GetPagesInSpace(GetPagesInSpaceOpts{Title: pageTitle, Limit: 10}, config)
 	if err != nil {
 		return nil, fmt.Errorf("error attempting to update page: %v", err)
@@ -210,7 +209,7 @@ func UpdatePage(pageTitle, htmlPageContent string, config configuration.Configur
 	versionIncrement := respBody.Results[0].Version.Number + 1
 	url := fmt.Sprintf("https://%s/wiki/api/v2/pages/%s", config.Domain, pageID)
 
-	payload := Bodies.UpdatePageRequestBody{
+	payload := UpdatePageRequestBody{
 		ID:     pageID,
 		Status: "current", // NOTE: tbf perhaps we should always copy the current status. Thus preventing _revealing_ drafts.
 		Title:  pageTitle,

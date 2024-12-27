@@ -1,4 +1,4 @@
-package bodies
+package confluence
 
 // Send this in a POST to https://{your-domain}/wiki/api/v2/pages to create a new page.
 type CreatePageRequestBody struct {
